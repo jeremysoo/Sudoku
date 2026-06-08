@@ -1,8 +1,9 @@
 plugins {
     kotlin("jvm") version "2.3.0"
+    application
 }
 
-group = "org.example"
+group = "com.sudoku"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -11,6 +12,11 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+}
+
+application {
+    mainClass.set("sudoku.MainKt")
 }
 
 kotlin {

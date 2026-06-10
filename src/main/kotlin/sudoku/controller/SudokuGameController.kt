@@ -1,6 +1,5 @@
 package sudoku.controller
 
-import kotlin.random.Random
 import sudoku.model.SudokuBoard
 import sudoku.service.SudokuSolver
 
@@ -9,48 +8,43 @@ sealed class MoveResult {
     data class Failure(val errorMessage: String) : MoveResult()
 }
 
+private const val BOARD_ROWS = 9
+private const val BOARD_COLS = 9
+private const val PREFILLED_CELLS = 30
+private const val EMPTY_CELLS = BOARD_ROWS * BOARD_COLS - PREFILLED_CELLS
+
 class SudokuGameController(private val solver: SudokuSolver = SudokuSolver()) {
     var currentBoard = SudokuBoard()
     var solutionBoard = SudokuBoard()
 
     fun createNewGame() {
-        val filledGrid = Array(9) { IntArray(9) { 0 } }
-        for (i in 0 until 9 step 3) {
-            val numbers = (1..9).shuffled()
-            var currentIndex = 0
-            for (r in 0..2) {
-                for (c in 0..2) { filledGrid[i + r][i + c] = numbers[currentIndex++] }
-            }
+        solutionBoard = solver.solve(SudokuBoard()) ?: throw IllegalStateException("Failed to generate Sudoku solution")
+
+        val puzzleGrid = solutionBoard.grid.map {
+            it.toMutableList()
+        }.toMutableList()
+
+        val preFilledCells = MutableList(9) {
+            MutableList(9) { true }
         }
 
-        val originalBoard = SudokuBoard(grid = filledGrid.map { it.toList() })
-        solutionBoard = solver.solve(originalBoard)
-            ?: throw IllegalStateException("Unable to solve original board.")
-
         var emptyCellsCreated = 0
-        val workingGrid = solutionBoard.grid.map { it.toMutableList() }.toMutableList()
-        val random = Random.Default
 
-        while (emptyCellsCreated < 51) {
-            val r = random.nextInt(9)
-            val c = random.nextInt(9)
-            if (workingGrid[r][c] != 0) {
-                workingGrid[r][c] = 0
+        while (emptyCellsCreated < EMPTY_CELLS) {
+            val row = (0..8).random()
+            val col = (0..8).random()
+
+            if (puzzleGrid[row][col] != 0) {
+                puzzleGrid[row][col] = 0
+                preFilledCells[row][col] = false
                 emptyCellsCreated++
             }
         }
 
-        val finalGrid = workingGrid.map { it.toList() }
-        val mask = mutableListOf<List<Boolean>>()
-        for (r in 0..8) {
-            val maskRow = mutableListOf<Boolean>()
-            for (c in 0..8) {
-                maskRow.add(finalGrid[r][c] != 0)
-            }
-            mask.add(maskRow.toList())
-        }
-
-        currentBoard = SudokuBoard(finalGrid, mask)
+        currentBoard = SudokuBoard(
+            grid = puzzleGrid.map { it.toList() },
+            isPreFilled = preFilledCells.map { it.toList() }
+        )
     }
 
     fun makeMove(row: Int, col: Int, value: Int, cellName: String): MoveResult {
@@ -137,6 +131,10 @@ class SudokuGameController(private val solver: SudokuSolver = SudokuSolver()) {
                     targets.add(Pair(row, col))
                 }
             }
+        }
+
+        if (targets.isEmpty()) {
+            return "No hints available."
         }
 
         val (row, col) = targets.random()

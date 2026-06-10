@@ -124,6 +124,17 @@ class SudokuGameControllerTest {
     }
 
     @Test
+    fun `unable to provide hint when puzzle already solved`() {
+        val controller = SudokuGameController()
+        controller.createNewGame()
+
+        controller.currentBoard = controller.solutionBoard
+        val hint = controller.provideHint()
+
+        assertEquals("No hints available.", hint)
+    }
+
+    @Test
     fun `check current grid row for validity`() {
         val controller = SudokuGameController()
 

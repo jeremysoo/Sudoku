@@ -9,12 +9,11 @@ class Main {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            println("Starting Sudoku...")
+            println("Welcome to Sudoku!\n")
 
             val controller = SudokuGameController()
             val scanner = Scanner(System.`in`)
 
-            println("Welcome to Sudoku!\n")
             controller.createNewGame()
 
             while (!controller.isGameOver()) {
@@ -41,7 +40,7 @@ class Main {
             }
 
             printGrid(controller.currentBoard)
-            println("Sudoku puzzle solved!")
+            println("You have successfully completed the Sudoku puzzle!")
         }
 
         private fun processGameplayCommand(input: String, controller: SudokuGameController) {

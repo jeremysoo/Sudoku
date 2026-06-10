@@ -1,12 +1,16 @@
 ## Introduction
-This is an interactive command line Sudoku program written in Kotlin.
+- This is an interactive command line Sudoku program written in Kotlin.
+
+- The application supports puzzle generation, move validation, hints,
+rule checking and puzzle completion detection.
 
 ## Environment Requirements
 JDK 21
-CLI Terminal eg. Windows Command Line / Powershell / Bash
+Gradle
+Command line terminal eg. Windows Command Prompt / Powershell / Bash
 
 ## Instructions to Launch Application
-# Windows Command Line / Powershell
+### Windows Command Prompt / Powershell
 .\gradlew.bat installDist
 .\build\install\Sudoku\bin\sudoku.bat
 
@@ -14,24 +18,41 @@ CLI Terminal eg. Windows Command Line / Powershell / Bash
 ./gradlew installDist
 ./build/install/Sudoku/bin/sudoku
 
+## Running Tests
+### Windows Command Prompt / Powershell
+.\gradlew.bat test
+
+### Bash
+./gradlew test
+
 ## Generate Windows Distributable Package
 .\gradlew.bat distZip
 Package path: build/distributions/Sudoku.zip
 
 ## Architectural Design
-This Sudoku application is designed around a clear separation of logic to keep code simple and highly testable.
-Test Driven Development (TDD) was used during the development where the tests were first written before the implementation.
-The codebase decouples the presentation loop from the core game logic to maximize simplicity, stability, and testability.
+- This Sudoku application is designed around a clear separation of responsibilities 
+to keep the code simple, maintainable and testable.
 
-SudokuBoard defines the domain data model containing the board grid and pre-filled cells for the puzzle.
-SudokuSolver is the service layer containing the logic to fill the board.
-SudokuGameController as the controller layer coordinates the game states of puzzle creation, user actions and validations.
-Main is the command line interface layer which manages the console terminal user input and output rendering and command routing.
+- Test Driven Development (TDD) was used during development, with tests written
+before implementation where practical.
+
+Components:
+- SudokuBoard
+    - Domain model representing the Sudoku grid and pre-filled cells.
+- SudokuSolver
+    - Service responsible for generating a valid Sudoku solution.
+- SudokuGameController
+    - Coordinates the game creation, user actions, validation, hints and game state.
+- Main
+    - Command line interface responsible for user interaction, input processing
+      and board rendering.
 
 ## Assumptions
-An immutable board state is assumed, such that the board can never be changed once it is created.
-User actions such as cell clearing creates a distinct board copy to ensure memory safety 
-and prevents unpredictable bugs during active gameplay.
+- SudokuBoard instances are treated as immutable. User actions create
+  a new board state rather than modifying the existing board in place.
 
-User inputs are also assumed to be formatted correctly and these alphanumeric characters for the cell coordinates 
-and user actions are validated and invalid inputs provided will be rejected.   
+- The generated puzzle contains 30 pre-filled cells as required by the specification.
+
+- Invalid user inputs are validated and rejected with an appropriate error message.
+
+- The application runs as a single-user command-line program.

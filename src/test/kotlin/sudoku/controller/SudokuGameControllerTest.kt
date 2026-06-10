@@ -105,10 +105,10 @@ class SudokuGameControllerTest {
         )
 
         // Clear it directly by passing a value of 0
-        val clearResult = controller.makeMove(2, 4, 0, "C5")
+        val clearResult = controller.clearCell(2, 4, "C5")
 
         assertTrue(clearResult is MoveResult.Success)
-        assertEquals("Move accepted.", clearResult.message)
+        assertEquals("C5 is cleared.", clearResult.message)
         assertEquals(0, controller.currentBoard.grid[2][4])
     }
 
@@ -154,11 +154,11 @@ class SudokuGameControllerTest {
         val invalidGridCol = listOf(
             listOf(5, 3, 0, 0, 7, 0, 0, 0, 0),
             listOf(6, 0, 0, 1, 9, 5, 0, 0, 0),
-            listOf(0, 9, 8, 0, 0, 0, 0, 6, 0),
+            listOf(5, 9, 8, 0, 0, 0, 0, 6, 0),
             listOf(8, 0, 0, 0, 6, 0, 0, 0, 3),
             listOf(4, 0, 0, 8, 0, 3, 0, 0, 1),
             listOf(7, 0, 0, 0, 2, 0, 0, 0, 6),
-            listOf(5, 6, 0, 0, 0, 0, 2, 8, 0),
+            listOf(0, 6, 0, 0, 0, 0, 2, 8, 0),
             listOf(0, 0, 0, 4, 1, 9, 0, 0, 5),
             listOf(0, 0, 0, 0, 8, 0, 0, 7, 9)
         )
@@ -177,8 +177,8 @@ class SudokuGameControllerTest {
 
         val invalidGridSubGrid = listOf(
             listOf(5, 3, 0, 0, 7, 0, 0, 0, 0),
-            listOf(6, 0, 0, 1, 9, 5, 0, 0, 0),
-            listOf(6, 9, 8, 0, 0, 0, 0, 6, 0),
+            listOf(6, 8, 0, 1, 9, 5, 0, 0, 0),
+            listOf(0, 9, 8, 0, 0, 0, 0, 6, 0),
             listOf(8, 0, 0, 0, 6, 0, 0, 0, 3),
             listOf(4, 0, 0, 8, 0, 3, 0, 0, 1),
             listOf(7, 0, 0, 0, 2, 0, 0, 0, 6),

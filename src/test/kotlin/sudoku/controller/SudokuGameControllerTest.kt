@@ -2,8 +2,8 @@ package sudoku.controller
 
 import org.junit.jupiter.api.Test
 import kotlin.test.assertTrue
-import kotlin.test.assertFalse
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 class SudokuGameControllerTest {
     private fun createEmptyGrid(): List<List<Int>> {
@@ -50,6 +50,31 @@ class SudokuGameControllerTest {
         )
 
         val result = controller.makeMove(0, 0, 6, "A1")
+
+        assertTrue(result is MoveResult.Failure)
+        assertEquals("Invalid move. A1 is pre-filled.", result.errorMessage)
+    }
+
+    @Test
+    fun `pre-filled cell cannot be cleared`() {
+        val controller = SudokuGameController()
+
+        val mockPreFilledMask = listOf(
+            listOf(true,  false, false, false, false, false, false, false, false),
+            listOf(false, false, false, false, false, false, false, false, false),
+            listOf(false, false, false, false, false, false, false, false, false),
+            listOf(false, false, false, false, false, false, false, false, false),
+            listOf(false, false, false, false, false, false, false, false, false),
+            listOf(false, false, false, false, false, false, false, false, false),
+            listOf(false, false, false, false, false, false, false, false, false),
+            listOf(false, false, false, false, false, false, false, false, false),
+            listOf(false, false, false, false, false, false, false, false, false)
+        )
+        controller.currentBoard = controller.currentBoard.copy(
+            isPreFilled = mockPreFilledMask
+        )
+
+        val result = controller.clearCell(0, 0, "A1")
 
         assertTrue(result is MoveResult.Failure)
         assertEquals("Invalid move. A1 is pre-filled.", result.errorMessage)
@@ -216,10 +241,20 @@ class SudokuGameControllerTest {
     }
 
     @Test
-    fun `ends game when grid is completely and correctly filled`() {
+    fun `game not over when just created`() {
         val controller = SudokuGameController()
         controller.createNewGame()
 
         assertFalse(controller.isGameOver())
+    }
+
+    @Test
+    fun `ends game when grid is completely and correctly filled`() {
+        val controller = SudokuGameController()
+        controller.createNewGame()
+
+        controller.currentBoard = controller.solutionBoard
+
+        assertTrue(controller.isGameOver())
     }
 }

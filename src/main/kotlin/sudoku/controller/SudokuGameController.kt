@@ -24,7 +24,7 @@ class SudokuGameController(private val solver: SudokuSolver = SudokuSolver()) {
             it.toMutableList()
         }.toMutableList()
 
-        val preFilledCells = MutableList(9) {
+        val preFilledGrid = MutableList(9) {
             MutableList(9) { true }
         }
 
@@ -36,14 +36,14 @@ class SudokuGameController(private val solver: SudokuSolver = SudokuSolver()) {
 
             if (puzzleGrid[row][col] != 0) {
                 puzzleGrid[row][col] = 0
-                preFilledCells[row][col] = false
+                preFilledGrid[row][col] = false
                 emptyCellsCreated++
             }
         }
 
         currentBoard = SudokuBoard(
             grid = puzzleGrid.map { it.toList() },
-            isPreFilled = preFilledCells.map { it.toList() }
+            isPreFilled = preFilledGrid.map { it.toList() }
         )
     }
 

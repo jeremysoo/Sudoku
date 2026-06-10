@@ -16,11 +16,11 @@ dependencies {
 }
 
 application {
-    mainClass.set("sudoku.MainKt")
+    mainClass.set("sudoku.Main")
 }
 
 kotlin {
-    jvmToolchain(25)
+    jvmToolchain(21)
 }
 
 tasks.test {

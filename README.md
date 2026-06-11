@@ -27,7 +27,7 @@ Command line terminal (Windows Command Prompt / Powershell / Bash)
 
 ## Generate Windows Distributable Package
 .\gradlew.bat distZip
-Package path: build/distributions/Sudoku.zip
+Package path: build/distributions/<project-name>-<version>.zip (Sudoku-1.0-SNAPSHOT.zip)
 
 ## Architectural Design
 - This Sudoku application is designed around a clear separation of responsibilities 

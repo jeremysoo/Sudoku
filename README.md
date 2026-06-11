@@ -2,7 +2,7 @@
 - This is an interactive command line Sudoku program written in Kotlin.
 
 - The application supports puzzle generation, move validation, hints,
-rule checking and puzzle completion detection.
+  rule checking and puzzle completion detection.
 
 ## Environment Requirements
 JDK 21
@@ -31,18 +31,22 @@ Package path: build/distributions/Sudoku.zip
 
 ## Architectural Design
 - This Sudoku application is designed around a clear separation of responsibilities 
-to keep the code simple, maintainable and testable.
+  to keep the code simple, maintainable and testable.
 
 - Test Driven Development (TDD) was used during development, with tests written
-before implementation where practical.
+  before implementation where practical.
 
 Components:
+
 - SudokuBoard
     - Domain model representing the Sudoku grid and pre-filled cells.
+  
 - SudokuSolver
     - Service responsible for generating a valid Sudoku solution.
+  
 - SudokuGameController
     - Coordinates the game creation, user actions, validation, hints and game state.
+  
 - Main
     - Command line interface responsible for user interaction, input processing
       and board rendering.
@@ -53,6 +57,6 @@ Components:
 
 - The generated puzzle contains 30 pre-filled cells as required by the specification.
 
-- Invalid user inputs are validated and rejected with an appropriate error message.
+- Invalid user inputs are validated and rejected with the appropriate error messages.
 
-- The application runs as a single-user command-line program.
+- The application runs as a single user command line program.

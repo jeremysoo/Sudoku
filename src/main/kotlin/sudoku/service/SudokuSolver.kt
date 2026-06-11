@@ -4,61 +4,51 @@ import sudoku.model.SudokuBoard
 
 class SudokuSolver {
     fun solve(board: SudokuBoard): SudokuBoard? {
-        if (!isValidBoard(board.grid)) {
-            return null
+        val workingGrid = board.grid.map {
+            it.toMutableList()
+        }.toMutableList()
+
+        return if (!solveGrid(workingGrid)) {
+            null
+        } else {
+            board.copy(
+                grid = workingGrid.map { it.toList() }
+            )
         }
-
-        val emptyCells = mutableListOf<Pair<Int, Int>>()
-        for (row in 0..8) {
-            for (col in 0..8) {
-                if (board.grid[row][col] == 0) emptyCells.add(Pair(row, col))
-            }
-        }
-        if (emptyCells.isEmpty()) return board
-
-        val workingGrid = board.grid.map { it.toMutableList() }.toMutableList()
-
-        var cellIndex = 0
-        while (cellIndex < emptyCells.size) {
-            val (row, col) = emptyCells[cellIndex]
-            val currentVal = workingGrid[row][col]
-
-            var foundValidValue = false
-            for (num in (currentVal + 1)..9) {
-                if (isValidPlacement(workingGrid, row, col, num)) {
-                    workingGrid[row][col] = num
-                    foundValidValue = true
-                    break
-                }
-            }
-
-            if (foundValidValue) {
-                cellIndex++
-            } else {
-                workingGrid[row][col] = 0
-                cellIndex--
-                if (cellIndex < 0) {
-                    return null
-                }
-            }
-        }
-
-        val finalGrid = workingGrid.map { it.toList() }
-        return SudokuBoard(finalGrid, board.isPreFilled)
     }
 
-    private fun isValidBoard(grid: List<List<Int>>): Boolean {
+    private fun solveGrid(grid: MutableList<MutableList<Int>>): Boolean {
+        val emptyCell = findEmptyCell(grid) ?: return true
+
+        val (row, col) = emptyCell
+
+        for (num in (1..9).shuffled()) {
+            if (isValidPlacement(grid, row, col, num)) {
+                grid[row][col] = num
+
+                if (solveGrid(grid)) {
+                    return true
+                }
+
+                grid[row][col] = 0
+            }
+        }
+
+        return false
+    }
+
+    private fun findEmptyCell(
+        grid: List<List<Int>>
+    ): Pair<Int, Int>? {
         for (row in 0..8) {
             for (col in 0..8) {
-                val num = grid[row][col]
-                if (num != 0) {
-                    if (!isValidPlacement(grid, row, col, num)) {
-                        return false
-                    }
+                if (grid[row][col] == 0) {
+                    return Pair(row, col)
                 }
             }
         }
-        return true
+
+        return null
     }
 
     private fun isValidPlacement(
@@ -67,23 +57,25 @@ class SudokuSolver {
         col: Int,
         num: Int
     ): Boolean {
-        return isRowValid(grid, row, col, num) &&
-                isColumnValid(grid, row, col, num) &&
+        return isRowValid(grid, row, num) &&
+                isColumnValid(grid, col, num) &&
                 isSubGridValid(grid, row, col, num)
     }
 
-    private fun isRowValid(grid: List<List<Int>>, row: Int, col: Int, num: Int): Boolean {
+    private fun isRowValid(grid: List<List<Int>>, row: Int, num: Int): Boolean {
         for (currentCol in 0..8) {
-            if (currentCol == col) continue
-            if (grid[row][currentCol] == num) return false
+            if (grid[row][currentCol] == num) {
+                return false
+            }
         }
         return true
     }
 
-    private fun isColumnValid(grid: List<List<Int>>, row: Int, col: Int, num: Int): Boolean {
+    private fun isColumnValid(grid: List<List<Int>>, col: Int, num: Int): Boolean {
         for (currentRow in 0..8) {
-            if (currentRow == row) continue
-            if (grid[currentRow][col] == num) return false
+            if (grid[currentRow][col] == num) {
+                return false
+            }
         }
         return true
     }

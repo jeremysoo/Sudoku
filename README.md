@@ -7,7 +7,7 @@
 ## Environment Requirements
 JDK 21
 Gradle
-Command line terminal eg. Windows Command Prompt / Powershell / Bash
+Command line terminal (Windows Command Prompt / Powershell / Bash)
 
 ## Instructions to Launch Application
 ### Windows Command Prompt / Powershell

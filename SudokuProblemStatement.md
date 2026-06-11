@@ -240,5 +240,5 @@ Current grid:
 
 Enter command (e.g., A3 4, C5 clear, hint, check):
 check
-Number 8 already exists in the same 3×3 subgrid.
+Number 8 already exists in the same 3x3 subgrid.
 ```

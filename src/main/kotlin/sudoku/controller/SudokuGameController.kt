@@ -111,7 +111,7 @@ class SudokuGameController(private val solver: SudokuSolver = SudokuSolver()) {
                         val num = grid[boxRow + i][boxCol + j]
                         if (num != 0) {
                             if (seen[num] > 0) {
-                                return "Number $num already exists in the same 3×3 subgrid."
+                                return "Number $num already exists in the same 3x3 subgrid."
                             }
                             seen[num]++
                         }

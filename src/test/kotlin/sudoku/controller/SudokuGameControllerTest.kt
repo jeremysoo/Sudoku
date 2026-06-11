@@ -228,7 +228,7 @@ class SudokuGameControllerTest {
         )
 
         val report = controller.checkCurrentValidity()
-        assertEquals("Number 8 already exists in the same 3×3 subgrid.", report)
+        assertEquals("Number 8 already exists in the same 3x3 subgrid.", report)
     }
 
     @Test

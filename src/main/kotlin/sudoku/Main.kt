@@ -25,6 +25,8 @@ class Main {
                 when (input) {
                     "quit" -> {
                         println("Game Over!")
+                        println("Press Enter to exit...")
+                        scanner.nextLine()
                         return
                     }
                     "hint" -> {
@@ -41,6 +43,8 @@ class Main {
 
             printGrid(controller.currentBoard)
             println("You have successfully completed the Sudoku puzzle!")
+            println("Press Enter to exit...")
+            scanner.nextLine()
         }
 
         private fun processGameplayCommand(input: String, controller: SudokuGameController) {
